@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arduino Data Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Poppins', sans-serif;
+        }
+        .container {
+            margin-top: 20px;
+            padding-bottom: 100px; /* Add padding to prevent footer overlap */
+        }
+        .card {
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        .table th {
+            background-color: #007bff;
+            color: white;
+        }
+        footer {
+            text-align: center;
+            padding: 1rem;
+            background-color: #007bff;
+            color: white;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Navigation Bar -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">Arduino Dashboard</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="front_page.html">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="about.html">About</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<header class="bg-primary text-white text-center py-4">
+    <h1>Arduino Data Dashboard</h1>
+</header>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card p-4 mb-4">
+                <h2 class="h5">Temperature</h2>
+                <canvas id="tempHumidityChart"></canvas>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card p-4 mb-4">
+                <h2 class="h5">Soil Moisture Levels</h2>
+                <canvas id="moistureChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card p-4 mb-4">
+                <h2 class="h5">Average Readings</h2>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Parameter</th>
+                            <th>Average Value</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Temperature (&deg;C)</td>
+                            <td id="avgTemp">-</td>
+                        </tr>
+                        <!-- <tr>
+                            <td>Humidity (%)</td>
+                            <td id="avgHumidity">-</td>
+                        </tr> -->
+                        <tr>
+                            <td>Soil Moisture (%)</td>
+                            <td id="avgMoisture">-</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Disperse Water Button -->
+    <div class="text-center mt-4">
+        <button class="btn btn-primary btn-lg">Disperse Water</button>
+    </div>
+</div>
+
+<footer>
+    <p>&copy; 2025 Arduino Data Dashboard</p>
+</footer>
+
+<!-- Uncomment and use this script if you have a backend to fetch data -->
+<!--
+<script>
+    async function fetchData() {
+        try {
+            const response = await fetch('fetch_data.php'); 
+            if (!response.ok) {
+                throw new Error(HTTP error! Status: ${response.status});
+            }
+            const data = await response.json();
+            
+            if (!data || typeof data !== 'object') {
+                throw new Error('Invalid data format received');
+            }
+            
+            document.getElementById('avgTemp').textContent = data.avgTemp ? data.avgTemp.toFixed(2) : '-';
+            document.getElementById('avgHumidity').textContent = data.avgHumidity ? data.avgHumidity.toFixed(2) : '-';
+            document.getElementById('avgMoisture').textContent = data.avgMoisture ? data.avgMoisture.toFixed(2) : '-';
+            
+            updateCharts(data.tempData || [], data.humidityData || [], data.moistureData || [], data.labels || []);
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
+    }
+
+    function updateCharts(tempData, humidityData, moistureData, labels) {
+        const ctx1 = document.getElementById('tempHumidityChart').getContext('2d');
+        new Chart(ctx1, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        label: 'Temperature (°C)',
+                        data: tempData,
+                        borderColor: 'red',
+                        fill: false
+                    },
+                    {
+                        label: 'Humidity (%)',
+                        data: humidityData,
+                        borderColor: 'blue',
+                        fill: false
+                    }
+                ]
+            }
+        });
+
+        const ctx2 = document.getElementById('moistureChart').getContext('2d');
+        new Chart(ctx2, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        label: 'Moisture Level (%)',
+                        data: moistureData,
+                        backgroundColor: 'green'
+                    }
+                ]
+            }
+        });
+    }
+
+    fetchData(); 
+    setInterval(fetchData, 5000);
+</script>
+-->
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
